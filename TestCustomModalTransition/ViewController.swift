@@ -37,7 +37,7 @@ class CustomPresentAnimationController: NSObject, UIViewControllerAnimatedTransi
     var presenting = true
     
     func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
-        return 1.1
+        return 0.35
     }
     
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
@@ -52,11 +52,20 @@ class CustomPresentAnimationController: NSObject, UIViewControllerAnimatedTransi
             containerView!.addSubview(toViewController.view)
         }
         
-        toViewController.view.transform = CGAffineTransformMakeScale(0.75, 0.75)
-        toViewController.view.hidden = true
-        UIView.animateWithDuration(0.5, animations: { 
+        toViewController.view.alpha = 0
+        toViewController.view.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        
+        UIView.animateWithDuration(0.15, animations: {
             
-            fromViewController.view.transform = CGAffineTransformMakeScale(0.75, 0.75)
+            fromViewController.view.transform = CGAffineTransformMakeScale(0.9, 0.9)
+            
+            
+        }) { (finished) in
+        }
+        
+        UIView.animateWithDuration(0.15, delay: 0.1, options: UIViewAnimationOptions(), animations: {
+            
+            fromViewController.view.alpha = 0
             
             
         }) { (finished) in
@@ -64,17 +73,20 @@ class CustomPresentAnimationController: NSObject, UIViewControllerAnimatedTransi
             if !self.presenting {
                 fromViewController.view.hidden = true
             }
-            toViewController.view.hidden = false
-            UIView.animateWithDuration(0.5, delay: 0.1, options: UIViewAnimationOptions(), animations: {
-                
-                toViewController.view.transform = CGAffineTransformIdentity
-                
-                }, completion: { (finished) in
-                    transitionContext.completeTransition(true)
-                    fromViewController.view.transform = CGAffineTransformIdentity
-            })
 
         }
+        
+        UIView.animateWithDuration(0.15, delay: 0.1, options: UIViewAnimationOptions(), animations: {
+            
+            toViewController.view.transform = CGAffineTransformIdentity
+            toViewController.view.alpha = 1
+            
+            }, completion: { (finished) in
+                transitionContext.completeTransition(true)
+                fromViewController.view.alpha = 1
+                fromViewController.view.transform = CGAffineTransformIdentity
+        })
+
 
     }
     
